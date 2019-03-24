@@ -1,0 +1,86 @@
+//------------------------------------------------
+//--- 010 Editor v8.0.1 Binary Template
+//
+//      File: Eternity Engine Skin File 0.1
+//   Authors: DevNP <dev.necropan@gmail.com>
+//   Version: 1.0
+//   Purpose: 
+//  Category: Game
+// File Mask: *.skn
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+/*************************************************
+*
+*
+**************************************************/
+enum EffectParamType {
+	EPT_INT			= 0,
+	EPT_FLOAT		= 1,
+	EPT_VECTOR		= 2,
+	EPT_TEX			= 3,
+	EPT_MATRIX		= 4,
+	EPT_VARIABLE	= 5,
+	EPT_INT_PTR		= 6,
+	EPT_FLOAT_PTR	= 7,
+	EPT_VECTOR_PTR	= 8,
+	EPT_MATRIX_PTR	= 9,
+	EPT_UNKNOWN		= 0xffffffff
+};
+typedef struct {
+    int nSize;    
+    char pName[nSize];
+}StdString<read=readString>;
+
+typedef struct {
+    char szHeaderString[ 256 ];
+	char szMeshName[ 256 ];
+	int nVersion;
+	int nSubMeshCount;
+}SkinFileHeader<size=1024>;
+
+
+typedef struct {
+    char szMaterialName[ 256 ];
+	char szEffectName[ 256 ];
+	float fAlphaValue;
+	int bEnableAlphablend;//bool
+}SSubSkinHeader <size=1024>;
+
+typedef struct {   
+    StdString str;
+	EffectParamType Type;
+	switch(Type)
+	{
+		case EPT_INT: int nInt; break;
+		case EPT_FLOAT: float fFloat; break;
+        case EPT_VECTOR: float fFloat4[ 4 ];  break;
+        case EPT_TEX:  
+             StdString FileTexture;
+        break;
+    }
+
+}SCustomParam <optimize=false>;
+
+////////////////////////////////////////////////////////
+
+SkinFileHeader heder;
+
+local int i,j;
+for( i = 0; i < heder.nSubMeshCount; i++ )
+{
+    SSubSkinHeader fg;
+    int nParamCount;
+    for( j = 0; j < nParamCount; j++ )
+	{
+        SCustomParam sk;
+    }
+}
+
+/* Helper
+ *-----------------------------------*/
+string readString(StdString &in){
+    local string out;
+    SPrintf(out,"%s",in.pName);
+    return out;
+}

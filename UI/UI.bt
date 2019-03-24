@@ -1,0 +1,650 @@
+//------------------------------------------------
+//--- 010 Editor v8.0.1 Binary Template
+//
+//      File: Dragon Nest Eternity Engine UI File
+//   Authors: DevNP <dev.necropan@gmail.com>
+//   Version: 1.0
+//   Purpose: 
+//  Category: Game
+// File Mask: *.ui
+//   History: 
+//------------------------------------------------
+
+LittleEndian();
+
+enum <int> BOOL { Trye=1,False=0 };
+
+enum <int> VERSION { 
+    VERSION_14=0x114,//NEW version
+    VERSION_13=0x113,//NEW version
+    VERSION_12=0x112,//NEW version
+    VERSION_11=0x111,
+    VERSION_10=0x110,//40 Cap
+    VERSION_09=0x109, 
+    VERSION_08=0x108, 
+    VERSION_07=0x107,
+    VERSION_06=0x106,
+    VERSION_05=0x105,
+    VERSION_04=0x104,
+    VERSION_03=0x103,
+    VERSION_02=0x102,
+    VERSION_01=0x101
+};
+
+enum <int>UI_CONTROL_TYPE
+{   UI_CONTROL_STATIC = 0, 
+	UI_CONTROL_BUTTON = 1, 
+	UI_CONTROL_CHECKBOX = 2,
+	UI_CONTROL_RADIOBUTTON = 3,
+	UI_CONTROL_COMBOBOX = 4,
+	UI_CONTROL_SLIDER = 5,
+	UI_CONTROL_EDITBOX = 6,
+	UI_CONTROL_IMEEDITBOX = 7,
+	UI_CONTROL_LISTBOX = 8,
+	UI_CONTROL_SCROLLBAR = 9,
+	UI_CONTROL_PROGRESSBAR = 10,
+	UI_CONTROL_CUSTOM = 11,
+	UI_CONTROL_TEXTBOX = 12,
+	UI_CONTROL_TEXTURECONTROL = 13,
+	UI_CONTROL_HTMLTEXTBOX = 14,
+	UI_CONTROL_TREECONTROL = 15,
+	UI_CONTROL_QUESTTREECONTROL = 16,
+	UI_CONTROL_ANIMATION = 17,
+	UI_CONTROL_LINE_EDITBOX = 18,
+	UI_CONTROL_LINE_IMEEDITBOX = 19,
+	UI_CONTROL_MOVIECONTROL = 20,
+	UI_CONTROL_LISTBOXEX = 21,
+	UI_CONTROL_SIZE = 22,
+};
+/* Heder
+ *-----------------------------------*/
+typedef struct {
+    char szHeaderString[256];
+    int nVersion;
+    int nTemplateCount;
+    int nControlCount;
+    int nFontCount;
+}SUIFileHeader <size=1024>;
+
+typedef struct {
+    int szString;
+    char pString[szString];
+}StdString <read=readStdStr,write=writeStdStr>;//StdString
+
+/* RGB color
+ *-----------------------------------*/
+typedef struct {  
+    ubyte b, g, r , a;
+} ARGBColor <read=argbRead, write=argbWrite>;
+
+// display the color a bit more nice
+string argbRead(ARGBColor &f) {
+     local string s;
+  // SetBackColor( ReadInt(FTell())&0xFFFFFF );
+   SPrintf( s, "#%02X%02X%02X (%i%%)", f.r, f.g, f.b, (f.a/255)*100);
+   return s;
+};
+void argbWrite(ARGBColor &c, string s) {
+    SScanf(s, "(%i %i %i %i)", c.r, c.g, c.b, c.a);
+}
+/* 
+ *-----------------------------------*/
+typedef struct{
+    hfloat left;
+    hfloat right;
+    hfloat top;
+    hfloat bottom;
+}hPOS;
+
+/* SFontInfo
+ *-----------------------------------*/
+typedef struct {    
+    VERSION ver;
+    int nFontHeight;    
+    int nFontWeight; 
+    hPOS _Padding;
+    hPOS  _Margin;     
+    ARGBColor cARGB; //int ColorA <format=hex>; //FF FF FF //FF FF FF FF
+    ParseRGBA(cARGB); 
+    char nameFile[260];
+    char nameFile2[260];   
+}SFontInfo;
+
+/* UI Template
+ *-----------------------------------*/
+
+typedef struct {       
+    local int i;
+    for(i=0;i<26;i++){       
+        ARGBColor aColor;   
+        ParseRGBA(aColor); 
+    }       
+    byte Data[57];
+    int unk1;
+     hPOS padin;   
+     hPOS marg;    
+}PARAM <optimize=false,size=181>;
+
+typedef struct {  
+    byte m_bShow <fgcolor=cRed>;//true false boll
+    int unknown;//version
+    StdString Text;
+    //int szNam;
+   // char Name[szNam];
+
+    int CountParam;         
+    PARAM bParam[CountParam];
+}UIProperty <optimize=false,read=prName>;
+
+/* UI Control
+ *-----------------------------------*/
+/**************** NEW UI version *************************/
+typedef struct{
+    VERSION ver;
+    int nStringIndex;
+	ARGBColor dwFontFormat;
+	BOOL bShadowFont;
+	ARGBColor dwFontColor;
+	int nFrameLeft;
+	int nFrameTop;
+	int nFrameRight;
+	int nFrameBottom;
+	ARGBColor dwShadowFontColor;
+    byte Bool;	
+    ARGBColor newColor;
+    byte unknown;  
+
+/**************** NEW UI version *************************/
+   if(ver == VERSION_09){
+       byte unknown1;//true false   
+       Printf("NEW UI version id[%d]  \n",ver);     
+    }
+/*********************************************************/
+}UIStatic;
+
+enum <byte> UIButtonType
+{     
+	UI_BUTTON_CLICK,
+	UI_BUTTON_TOGGLE,
+};
+
+typedef struct{
+    VERSION ver;
+    int nStringIndex;
+    float fMoveOffsetHori;
+	float fMoveOffsetVert;
+    UIButtonType ButtonType;
+    //UIButtonSound ButtonSound;
+    BOOL bVariableWidth;
+    float fVariableWidthLength;
+	int nButtonID;
+	char szSoundFileName[32];
+    byte unknown;
+}UIButton;
+
+typedef struct{
+    VERSION ver;
+    int nStringIndex;
+    float fSpace;
+	int nAllign;
+}UICheckBox;
+
+
+typedef struct{
+    int nStringIndex;
+	int nButtonGroup;
+    float fSpace;
+	int nAllign;
+	int nTabID;
+	int nIconIndex;
+	char szSoundFileName[32];
+	float fMoveOffsetHori;
+	float fMoveOffsetVert;
+    byte unknown[5];
+}rBtLoad_06;
+
+typedef struct{
+    int nStringIndex;
+	int nButtonGroup;
+    float fSpace;
+	int nAllign;
+	int nTabID;
+	int nIconIndex;
+	char szSoundFileName[32];
+	float fMoveOffsetHori;
+	float fMoveOffsetVert;
+    byte unknown[4];
+
+}rBtLoad_07;
+
+typedef struct{
+    VERSION dwVersion;
+    switch( dwVersion ) {
+    case VERSION_01: rBtLoad_06 rBt06; break;
+    case VERSION_02: rBtLoad_06 rBt06; break;
+    case VERSION_03: rBtLoad_06 rBt06; break;
+    case VERSION_04: rBtLoad_06 rBt06; break;
+    case VERSION_05: rBtLoad_06 rBt06;  break;
+    case VERSION_06: rBtLoad_06 rBt06; break;
+    case VERSION_07: rBtLoad_07 rBt007;  break;//----
+    case VERSION_08: rBtLoad_06 rBt006;  break;//----
+    default: Printf("Error version UITextBox\n");   break;
+  }
+}UIRadioButton;
+
+
+typedef struct{
+    VERSION ver;
+    float fMoveOffsetHori;
+    float fMoveOffsetVert;
+	float fDropdownSize;
+	float fScrollBarSize;
+	int nScrollBarTemplate;
+	float fVariableWidthLength;
+	float fLineSpace;
+}UIComboBox;
+
+typedef struct{
+    VERSION ver;
+    int nMinValue;
+	int nMaxValue;
+}UISlider;
+
+typedef struct{
+    VERSION ver;
+    float fSpace;
+	float fBorder;
+	ARGBColor dwTextColor;
+	ARGBColor dwSelTextColor;
+	ARGBColor dwSelBackColor;
+	ARGBColor dwCaretColor;
+	BOOL bPassword;//BOOL
+	DWORD dwMaxChars;
+	BOOL bOnlyDigit;//BOOL
+}UIEditBox;
+
+typedef struct{
+    VERSION ver;
+    float fSpace;
+		float fBorder;
+		DWORD dwTextColor;
+		DWORD dwSelTextColor;
+		DWORD dwSelBackColor;
+		DWORD dwCaretColor;
+		BOOL bPassword;
+		float fIndicatorSize;
+		DWORD dwCompTextColor;
+		DWORD dwCompBackColor;
+		DWORD dwCompCaretColor;
+		DWORD dwCandiTextColor;
+		DWORD dwCandiBackColor;
+		DWORD dwCandiSelTextColor;
+		DWORD dwCandiSelBackColor;
+		DWORD dwIndiTextColor;
+		DWORD dwReadingTextColor;
+		DWORD dwReadingBackColor;
+		DWORD dwReadingSelTextColor;
+		DWORD dwReadingSelBackColor;
+		DWORD dwMaxChars;
+}UIIMEEditBox;
+
+typedef struct{
+    float fScrollBarSize;
+	int nScrollBarTemplate;
+	BOOL bMultiSelect;
+	float fBorder;
+	float fMargin;
+	float fLineSpace;
+}lBLoad_01;
+typedef struct{
+    float fScrollBarSize;
+	int nScrollBarTemplate;
+	BOOL bMultiSelect;
+	float fBorder;
+	float fMargin;
+	float fLineSpace;
+}lBLoad_02;
+typedef struct{
+    float fScrollBarSize;
+	int nScrollBarTemplate;
+	BOOL bMultiSelect;
+	float fBorder;
+	float fMargin;
+	float fLineSpace;
+    byte unknown;
+}lBLoad_03;
+typedef struct{
+    VERSION dwVersion;
+    switch( dwVersion ) {
+    case VERSION_01: lBLoad_01 lB01; break;
+    case VERSION_02: lBLoad_02 lB02; break;
+    case VERSION_03: lBLoad_03 lB03; break;//NEW UI
+    default: Printf("Error version UITextBox\n");   break;
+  }
+}UIListBox;
+
+typedef struct{
+    VERSION dwVersion;
+    float fThumbVariableLenth;
+}UIScrollBar;
+
+typedef struct{
+    VERSION ver;
+    float fHoriBorder;
+    float fVertBorder;  
+}UIProgressBar;
+
+typedef struct{ 
+    VERSION ver;
+    ARGBColor dwColor;
+}UICustom;
+
+enum UIAllignHoriType
+{
+	AT_HORI_NONE,
+	AT_HORI_LEFT,
+	AT_HORI_CENTER,
+	AT_HORI_RIGHT,
+	AT_HORI_LEFT_FIXED,
+	AT_HORI_RIGHT_FIXED,
+};
+enum UIAllignVertType { 
+    AT_VERT_NONE,
+    AT_VERT_TOP,
+    AT_VERT_CENTER,	
+    AT_VERT_BOTTOM,
+};
+
+enum UITextBoxVariableType { UI_TEXTBOX_NONE,UI_TEXTBOX_WIDTH,UI_TEXTBOX_HEIGHT,UI_TEXTBOX_BOTH,};
+
+typedef struct { 
+    BOOL bVerticalScrollBar;//bool
+	BOOL bLeftScrollBar;//bool
+	float fScrollBarSize;
+	int nScrollBarTemplate;
+	float fLineSpace;
+    UIAllignHoriType AllignHori;//UIAllignHoriType AllignHori;
+	UIAllignVertType AllignVert;//UIAllignVertType AllignVert;
+	UITextBoxVariableType VariableType;//UITextBoxVariableType VariableType;
+    BOOL bRollOver;//bool
+}tbLoad_06;
+
+typedef struct { 
+    BOOL bVerticalScrollBar;//bool
+	BOOL bLeftScrollBar;//bool
+	float fScrollBarSize;
+	int nScrollBarTemplate;
+	float fLineSpace;
+    BOOL bRollOver;//bool
+    byte unknown[3];
+}tbLoad_07;
+typedef struct { 
+    VERSION dwVersion; 
+    switch( dwVersion ) {
+    case VERSION_01: tbLoad_06 l06; break;
+    case VERSION_02: tbLoad_06 l06; break;
+    case VERSION_03: tbLoad_06 l06; break;
+    case VERSION_04: tbLoad_06 l06; break;
+    case VERSION_05: tbLoad_06 l06;  break;
+    case VERSION_06: tbLoad_06 l06; break;
+    case VERSION_07: tbLoad_07 l07;  break;//----
+    default: Printf("Error version UITextBox\n");   break;
+  }
+}UITextBox;
+
+typedef struct { 
+    VERSION ver;
+    int nStringIndex;
+	DWORD dwFontFormat;
+	BOOL bShadowFont;
+	ARGBColor dwFontColor;//DWORD
+	char szTextureFileName[32];
+    //Printf("%s\n",szTextureFileName);
+
+}UITextureControl;
+
+typedef struct {
+    VERSION ver;
+    byte bVerticalScrollBar;//bool
+	float fScrollBarSize;
+	int nScrollBarTemplate;
+	byte bLeftScrollBar;//bool
+	float fLineSpace;
+	byte bRollOver;//bool
+}UIHtmlTextBox;
+
+typedef struct {
+    VERSION ver;
+    byte bVerticalScrollBar; //bool
+	float fScrollBarSize;
+	int nScrollBarTemplate;
+	float fLineSpace;
+	float fIndentSize;
+}UITreeControl;
+
+typedef struct {
+   VERSION ver;
+    byte bVerticalScrollBar;//bool
+	float fScrollBarSize;
+	int nScrollBarTemplate;
+	float fLineSpace;
+	float fIndentSize;
+}UIQuestTreeControl;
+
+typedef struct {
+   VERSION ver;
+    byte bLoop;//bool
+
+    byte unknown[8];   
+}UIAnimation;
+
+typedef struct {
+   VERSION ver;
+    DWORD dwTextColor;
+	DWORD dwSelTextColor;
+	DWORD dwSelBackColor;
+	DWORD dwCaretColor;
+	float fLineSpace;
+}UILineEditBox;
+
+typedef struct {
+    VERSION ver;
+    DWORD dwTextColor;
+	DWORD dwSelTextColor;
+	DWORD dwSelBackColor;
+	DWORD dwCaretColor;
+	DWORD dwCompTextColor;
+	DWORD dwCompBackColor;
+	DWORD dwCompCaretColor;
+	DWORD dwCandiTextColor;
+	DWORD dwCandiBackColor;
+	DWORD dwCandiSelTextColor;
+	DWORD dwCandiSelBackColor;
+	DWORD dwReadingTextColor;
+	DWORD dwReadingBackColor;
+	DWORD dwReadingSelTextColor;
+	DWORD dwReadingSelBackColor;
+	float fLineSpace; 
+}UILineIMEEditBox;
+
+typedef struct{
+    VERSION ver;
+    byte unknown[8]; 
+}UIMovieControl;
+
+typedef struct{
+    float fScrollBarSize;
+	int nScrollBarTemplate;
+	BOOL bMultiSelect;
+	float fBorder;
+	float fMargin;
+	float fLineSpace;
+	char szListBoxItemUIFileName[32];
+}lBExLoad_01;
+
+typedef struct{
+    float fScrollBarSize;
+    int nScrollBarTemplate;
+    BOOL bMultiSelect;
+    float fBorder;
+	float fMargin;
+	float fLineSpace;
+	char szListBoxItemUIFileName[32];
+	int nSelectFrameLeft;
+	int nSelectFrameTop;
+	int nSelectFrameRight;
+	int nSelectFrameBottom;
+}lBExLoad_02;
+
+typedef struct{
+    float fScrollBarSize;
+    int nScrollBarTemplate;
+    BOOL bMultiSelect;
+    float fBorder;
+	float fMargin;
+	float fLineSpace;
+	char szListBoxItemUIFileName[32];
+	int nSelectFrameLeft;
+	int nSelectFrameTop;
+	int nSelectFrameRight;
+	int nSelectFrameBottom;
+    byte unknown;
+}lBExLoad_03;
+
+typedef struct {
+   VERSION dwVersion;  
+   switch( dwVersion ) {
+    case VERSION_01: lBExLoad_01 lBEx01; break;
+    case VERSION_02: lBExLoad_02 lBEx02; break;
+    case VERSION_03: lBExLoad_03 lBEx03; break;
+    default: Printf("Error version UIListBoxEx\n");   break;
+}    
+}UIListBoxEx;
+
+//UI_CONTROL_SIZE
+/*********************************************************/
+typedef struct { float fX;float fY; float fWidth; float fHeight; }SUICoord;
+typedef struct {   
+    VERSION ver;
+    UI_CONTROL_TYPE tp <bgcolor=0x00ff00>;   
+    int nID;
+    int nHotKey;
+    int nTemplateIndex;
+    BOOL bl;
+    SUICoord UICoord;    
+    char name[32] <bgcolor=0xd8d8d8>;
+    int nCustomControlID;
+	int nTooltipStringIndex;
+	int nInitState; 
+     switch(tp){
+        case UI_CONTROL_STATIC:  UIStatic Static; break;
+        case UI_CONTROL_BUTTON:  UIButton Button; break;
+        case UI_CONTROL_CHECKBOX:  UICheckBox CheckBox; break;
+        case UI_CONTROL_RADIOBUTTON: UIRadioButton RadioButton; break;
+        case UI_CONTROL_COMBOBOX:  UIComboBox ComboBox; break;
+        case UI_CONTROL_SLIDER:  UISlider Slider; break;
+        case UI_CONTROL_EDITBOX:  UIEditBox EditBox; break;
+        case UI_CONTROL_IMEEDITBOX: UIIMEEditBox IMEEditBox; break;
+        case UI_CONTROL_LISTBOX:  UIListBox ListBox; break;
+        case UI_CONTROL_SCROLLBAR:  UIScrollBar ScrollBar; break;
+        case UI_CONTROL_PROGRESSBAR: UIProgressBar ProgressBar; break;
+        case UI_CONTROL_CUSTOM: UICustom Custom; break;
+        case UI_CONTROL_TEXTBOX: UITextBox TextBox; break;
+        case UI_CONTROL_TEXTURECONTROL: UITextureControl TextureControl; break;
+        case UI_CONTROL_HTMLTEXTBOX: UIHtmlTextBox HtmlTextBox; break;
+        case UI_CONTROL_TREECONTROL: UITreeControl TreeControl; break;
+        case UI_CONTROL_QUESTTREECONTROL: UIQuestTreeControl QuestTreeControl; break;
+        case UI_CONTROL_ANIMATION: UIAnimation Animation; break;
+        case UI_CONTROL_LINE_EDITBOX: UILineEditBox LineEditBox; break;
+        case UI_CONTROL_LINE_IMEEDITBOX: UILineIMEEditBox LineIMEEditBox; break;
+        case UI_CONTROL_MOVIECONTROL: UIMovieControl MovieControl; break;
+        case UI_CONTROL_LISTBOXEX: UIListBoxEx ListBoxEx; break;  
+        case UI_CONTROL_SIZE:  byte SIZE; break;  
+        default: Printf("Type ID [%d]  not found\n",tp); break;
+   }
+
+}UIControlProperty <optimize=false,read=strRead>;
+
+/**************************************************************/
+/**************************************************************/
+/**************************************************************/
+
+SUIFileHeader heed; //heder
+SFontInfo sFInfo; //Font info
+
+struct {   
+    int unk_1;
+    int unt_2;
+    int unk_3;
+    int unk_4;
+    short unk_5;
+    if(heed.nTemplateCount>0)
+        UIProperty svNam[heed.nTemplateCount];   
+}UITemplate;
+
+byte onOff;//on off
+if(heed.nControlCount>0){
+local int f=0;
+    for(f=0;f<heed.nControlCount;f++){       
+       UIControlProperty pControl;     
+    }  
+}
+
+/**************************************************************/
+/**************************************************************/
+/**************************************************************/
+
+/*******************************************************
+ *  0. Helpers
+*******************************************************/
+string prName(UIProperty &in){
+    local string out;
+    SPrintf(out,"%s",in.Text.pString);
+    return out;
+}
+
+void writeStdStr(StdString &f, string s){
+
+local int szStr = Strlen(s)+1;
+    if(szStr <= f.szString)
+    {
+        f.szString = szStr;
+        f.pString = s;
+    }else{
+        Printf("Text size %d",szStr);
+    }
+}
+
+string readStdStr(StdString &in){
+    local string out;
+    SPrintf(out,"%s",in.pString);
+    return out;
+}
+string strRead(UIControlProperty &in){
+    local string out;
+    SPrintf(out,"%s",in.name);
+    return out;
+}
+
+void ParseRGBA(ARGBColor &r) {
+    local int pos = FTell();
+    FSeek(pos - 4);
+    local int blue = (r.b);
+    local int green = (r.g);
+    local int red = (r.r);
+    local int bc = (int)blue * 0x10000 + (int)green * 0x100 + (int)red;
+    SetBackColor(bc);   
+    int a <hidden=true>;
+    SetBackColor(cNone);
+   // FSeek(pos);
+}
+
+void SetStdColor() {
+    SetColor( cBlack, cWhite );
+}
+//if(!FEof())
+//Printf("Error, structure does not match file!\n");
+/*************************************************
+*
+*
+**************************************************/
