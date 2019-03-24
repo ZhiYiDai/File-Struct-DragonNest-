@@ -1,0 +1,22 @@
+//--------------------------------------
+//--- 010 Editor v6.0 Binary Template
+//
+// File: Eternity Engine Kd-Tree File
+// Author: DevNP <dev.necropan@gmail.com>
+// Revision:
+// Purpose:
+// Category: Game
+// File Mask: gridinfo.ini
+// ID Bytes: 
+// History: 
+//--------------------------------------
+
+//char  sign[4];
+
+byte null[64];
+
+int sPos1;
+int sPos2;
+int sPos3;
+int sPos4;
+int sPos5;

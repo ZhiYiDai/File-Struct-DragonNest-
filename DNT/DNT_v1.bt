@@ -1,0 +1,92 @@
+//--------------------------------------
+//--- 010 Editor v6.0 Binary Template
+//
+// File: Dragon Nest Data Tables
+// Author: DevNP <dev.necropan@gmail.com>
+// Revision:  1.0
+// Purpose:
+// Category: Game
+// File Mask: *.dnt
+// History: 
+//--------------------------------------
+int num;  
+ushort numColumn; 
+int LenStock;
+
+typedef struct{
+   ushort lenStr;
+   char name[lenStr];
+   byte TypeColl;
+
+}ColumsChar <optimize=false,read=readColumsChar>;
+
+typedef struct {
+   ColumsChar col[numColumn];   
+}COLUMS  <optimize=false>;
+
+typedef struct {
+    ushort lenStr;
+    if(lenStr !=0)  
+        char strName[lenStr]; 
+    
+    // else if(lenStr <=2){
+       // ubyte strNames;         
+   //}else  byte null[14];
+
+}stType <optimize=false,read=readstType>;
+
+string readstType(stType &fn){
+    local string out;
+    if(fn.lenStr>0)
+        SPrintf(out, "%s ", fn.strName);
+    else
+        SPrintf(out, "Not found ");
+    return out;
+}
+
+typedef struct {
+     for(i=0;i<numColumn;i++){
+
+        switch(cols.col[i].TypeColl){
+            case 1: 
+               stType   _stType;
+               break;
+            case 2: 
+                uint typeINT; 
+               break;
+            case 3:             
+                uint typeINT; 
+                 // ushort typeChar; 
+                  //ushort typeShort;
+                break;
+            case 4:             
+                  float typeINT; 
+                break;
+            case 5:             
+                  float typeINT; 
+                break;
+            default: int _RowID;  break;
+        }
+    }
+}srrLine  <optimize=false>;
+ 
+COLUMS cols;
+struct {  
+   
+local int i,j;
+   
+for (j=0;j<LenStock;j++){
+        uint _RowID;
+        srrLine sd;
+    }
+   
+}DATA <optimize=false>;
+
+byte lenStrEnd;
+char strEnd[lenStrEnd];
+
+string readColumsChar(ColumsChar &fn){
+    local string out;
+     SPrintf(out, "%s : %d", fn.name,fn.TypeColl);
+    return out;
+}

@@ -1,0 +1,80 @@
+//--------------------------------------
+//--- 010 Editor v6.0 Binary Template
+//
+// File: Dragon Nest Data Tables
+// Author: DevNP <dev.necropan@gmail.com>
+// Revision:  1.0
+// Purpose:
+// Category: Game
+// File Mask: *.dnt
+// History: 
+//--------------------------------------
+LittleEndian();
+
+typedef struct {
+    short lenStr;
+    if(lenStr != 0)  
+        char strName[lenStr]; 
+}TYPE_STRING <optimize=false>;
+
+typedef struct{
+   short FildNameLen;
+   char nFildName[FildNameLen];
+   ubyte FildType;
+}FildName  <read=readFildName>;//<optimize=false>;//,read=readColumsChar
+
+
+short Version <bgcolor=0x00ffff>;  
+short ReversionLen <bgcolor=0x00ff00>;
+short FildCount <fgcolor=0x00db8b,bgcolor=0xffffff>; 
+int DataCount <fgcolor=0xf5a700,bgcolor=0xffffff>;
+
+struct{
+    local int i,j;
+    for (i=0;i<FildCount;i++){
+        FildName nFildName <bgcolor=0x00db8b>; 
+    }  
+}FildNameFildIndex;
+
+typedef struct {
+ local int j;  
+     int m_vItemID;
+     for(j=0;j<FildCount;j++){   
+        switch(FildNameFildIndex.nFildName[j].FildType){
+            case 0: byte null;  break; 
+            case 1: TYPE_STRING str;  break; 
+            case 2: int TYPE_BOOL;    break; 
+            case 3: int TYPE_INT;   break; 
+            case 4: float TYPE_PER;    break; // 0.005
+            case 5: float TYPE_FLOAT; break; //float 5.511464e-05 hF 0.05383301
+            //default: byte unknown[4]; break; 
+            }
+        }
+}iData <read=readTableData,bgcolor=0xf5a700>;
+
+struct {
+    local int i;
+    for(i=0;i<DataCount;i++){        
+        iData Row;
+    }
+}TableRows;
+
+struct { 
+    ubyte szEND;
+    char END[szEND];
+}END;
+
+/*************************************************************
+************************Helpers*******************************
+*************************************************************/
+string readFildName(FildName &f) {    
+   local string s; 
+   SPrintf(s, "%d %s",f.FildType,f.nFildName); //
+   return s;
+};
+
+string readTableData(iData &f) {    
+   local string s; 
+   SPrintf(s, "RowID: %d",f.m_vItemID); //
+   return s;
+};

@@ -1,0 +1,40 @@
+//------------------------------------------------
+//--- 010 Editor v8.0.1 Binary Template
+//
+//      File: Eternity Engine Kd-Tree File
+//   Authors: DevNP <dev.necropan@gmail.com>
+//   Version: 1.0
+//   Purpose: 
+//  Category: Game
+// File Mask: colbuild.ini
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+struct {
+    char magitSect[256];
+    int nVersion;
+
+}SKdTreeFileHeader <size=1024>;
+
+enum <int> EVENT_STATE { STATE_OUT = 0,STATE_ON = 1,STATE_IN = 2 };
+
+struct {
+    float fSplitPoint;
+    EVENT_STATE tt;
+    int nTriangleIndex;//m_dwTriangleIndex = ( State << 30 ) + ( ( DWORD )nTriangleIndex & 0x3fffffff );
+
+
+    float m_fSplitPoint;
+	DWORD m_dwTriangleIndex;
+}SKdTreeEvent;
+
+enum <int> SPLIT_AXIS { 	SPLIT_X = 0, SPLIT_Y = 1, SPLIT_Z = 2,SPLIT_END = 3 };
+
+
+struct {
+
+		float m_fSplitPoint;
+		int m_nChildCount; 
+
+    SPLIT_AXIS Axis;
+}SKdTreeSplit;

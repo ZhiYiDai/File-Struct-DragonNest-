@@ -1,0 +1,84 @@
+//--------------------------------------
+//--- 010 Editor v6.0 Binary Template
+//
+// File: EyedentityGames Packing File 0.1
+// Author: DevNP <dev.necropan@gmail.com>
+// Revision: 1.1
+// Purpose:
+// Category: Game
+// File Mask: *.pak
+//--------------------------------------
+//%d, %i - signed integer
+//%u - unsigned integer
+//%x, %X - hex integer
+//%o - octal integer
+//%c - character
+//%s - string
+//%f, %e, %g - float
+//%lf - double
+//%Ld - signed int64
+//%Lu - unsigned int64
+//%Lx, %LX - hex int64
+
+//#include <zlib/zlib.h>
+//#include "ZIPTemplate.bt"
+//Printf( "EyedentityGames Packing File 0.1\n" );
+
+
+LittleEndian();
+
+typedef struct() {  
+    char Signature[256] <comment="EyedentityGames Packing File 0.1">;
+    int  Version <bgcolor=0xffffff>;
+    int  FileCounts <bgcolor=0x339966>;
+    //int  TableOffset <format=hex,bgcolor=0x07120a> ;
+    DWORD dwFileInfoOffset <bgcolor=0x07120a>;
+	byte bRequireHeaderWrite;//bool
+	char cPadding[ 3 ];
+} HEADER <read=read_HEADER,size=1024>;
+
+typedef struct  {    
+   char szFileName[256] <bgcolor=0xafdafc>;
+   DWORD dwCompressSize <bgcolor=0x005675,comment="This is the size of the file"> ;
+   DWORD dwOriginalSize <bgcolor=0x0099cc, comment="The size of the file after unpacking">; //
+   DWORD dwAllocSize <format=hex, comment="This is the file size in the HEX value">;  
+   DWORD dwOffset <format=hex,comment="This is the position of the file">; //start compress position
+   DWORD dwSeedValue <bgcolor=0x0f00fc>;//level compresion  
+   DWORD dwChecksum;
+   char cReserved[ 36 ];
+if(dwSeedValue>48)
+    Printf("Seed %d\n",dwSeedValue);
+
+}FILE <optimize=false>;  //<read=read_VERECORD>
+
+HEADER head;
+FSeek(head.dwFileInfoOffset);
+typedef struct {  
+           FILE m_file;   
+           local int pos = FTell();    
+           FSeek(m_file.dwOffset); 
+           ubyte szCompr[m_file.dwCompressSize];
+           FSeek(pos);
+
+} PAKfile <optimize=false,read=read_RECORD>;
+local int i; 
+for(i=0;i<head.FileCounts;i++){  
+    PAKfile zcFiles;
+}
+
+//typedef enum <byte>{    sInfo = 256,  SizeCompression=0x4,    SizeUncopresion=0x4,    hSizeCompression=0x4,    cPOSITION=0x4,    unknown=0x2C} INFOFILE;
+//*****************************************************************************
+//***************************Helpers*******************************************
+//*****************************************************************************
+string read_HEADER(HEADER &in) {
+    string out;    
+    SPrintf(out, "Count[%d] : 0x%X", in.FileCounts, in.dwFileInfoOffset);
+    return out;
+}
+
+
+string read_RECORD(PAKfile &in){
+        string out;
+        SPrintf(out, "%s || 0x%X || SeeD: %d", in.m_file.szFileName, in.m_file.dwCompressSize,in.m_file.dwSeedValue);
+        return out;
+}

@@ -1,0 +1,147 @@
+//--------------------------------------
+//--- 010 Editor v6.0 Binary Template
+//
+// File: Eternity Engine Ani (*.ani)
+// Author: DevNP <dev.necropan@gmail.com>
+// Version: 1.0
+// Category: Game
+// File Mask: *.ani
+// Revision:
+// Purpose:
+//--------------------------------------
+#define ANI_FILE_STRING	"Eternity Engine Ani File 0.1"
+#define ANI_FILE_VERSION	11
+
+LittleEndian();
+
+typedef struct() {  
+    char szHeaderString[256] <comment=ANI_FILE_STRING>;
+    int  nVersion <bgcolor=0xffffff>;
+    int  nBoneCount <bgcolor=0x339966>;
+    int  nAniCount <bgcolor=0x07120a> ;
+} SAniFileHeader <size=1024>;
+
+typedef struct (){
+    float x;
+    float y;
+    float z;
+}Vector3;
+
+typedef struct {
+  float x, y, z, w;
+}EtQuat;
+
+typedef struct ()
+{
+    char szBoneName[ 256 ];
+} AniInfo;
+
+typedef struct (){
+	char szBoneName[ 256 ];
+	char szParentName[ 256 ];
+} SBoneHeader <size=1024>;
+
+typedef struct
+{
+	int nTime;
+	Vector3 Position;
+}PositionKeyOld;
+
+typedef struct {
+    Vector3 m_DefaultPosition;
+    EtQuat m_DefaultRotation;
+    Vector3 m_DefaultScale;
+    int nCount;
+    if(nCount>0){
+        local int i=0;
+        for( i = 0; i < nCount; i++ )
+		{
+          PositionKeyOld PositionKey;
+        }
+    }
+    int nCount;
+    
+}KeyOld;
+
+
+typedef struct {
+    short nTime;
+	Vector3 Position;
+}PositionKey;
+
+typedef struct {
+    short nTime;
+	short Rotation[ 4 ];
+}RotationKey;
+
+typedef struct {
+    short nTime;
+	Vector3 Scale;
+}ScaleKey;
+
+typedef struct {
+    if( m_AniHeader.nVersion <= 10 )
+	{
+        KeyOld pKey;
+    }
+
+    Vector3 m_DefaultPosition;
+    EtQuat m_DefaultRotation;
+    Vector3 m_DefaultScale;
+    int nCount;
+    if(nCount>0){
+        PositionKey m_vecPositionKey[nCount];
+    }
+
+    int nCount;
+    if(nCount>0){
+        RotationKey m_vecRotationKey[nCount];
+    }
+
+    int nCount;
+    if(nCount>0){
+        ScaleKey m_vecScaleKey[nCount];
+    }
+
+}AniKey;
+
+typedef struct {
+    SBoneHeader m_BoneHeader;
+    local int i =0;
+   for( i = 0; i < m_AniHeader.nAniCount; i++ )
+	{
+        AniKey pAniKey;
+   }
+}Bone;
+
+typedef struct ()
+{
+	Vector3 bn[3];
+	int fFrame;
+	int fWeight;
+    char szParentName[ 256 ];
+} Scene;
+
+
+SAniFileHeader m_AniHeader;
+
+local int i =0;
+for(i=0;i<m_AniHeader.nAniCount;i++){
+  AniInfo szAniName;
+}
+
+int m_vecAniLength[m_AniHeader.nAniCount];
+
+for(i=0;i<m_AniHeader.nBoneCount;i++){
+
+    Bone m_Bone;
+
+}
+
+//Scene sc;
+
+
+/****************************************************
+*
+*
+*****************************************************/

@@ -1,0 +1,14 @@
+//------------------------------------------------
+//--- 010 Editor v8.0.1 Binary Template
+//
+//      File: Eternity Engine Kd-Tree File
+//   Authors: DevNP <dev.necropan@gmail.com>
+//   Version: 1.0
+//   Purpose: 
+//  Category: Game
+// File Mask: decalinfo.ini
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+int nSize;

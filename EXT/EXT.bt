@@ -1,0 +1,79 @@
+//------------------------------------------------
+//--- 010 Editor v8.0.1 Binary Template
+//
+//      File: 
+//   Authors: DevNP <dev.necropan@gmail.com>
+//   Version: 1.0
+//   Purpose: 
+//  Category: 
+// File Mask: *.ext
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+typedef struct {
+    short lenStr;
+    if(lenStr != 0)  
+        char strName[lenStr]; 
+}TYPE_STRING <optimize=false>;
+
+typedef struct{
+   char Name[64]; 
+   int FildType;
+}FildName  <read=readFildName>;
+
+
+int Version;  
+int FildCount; 
+int DataCount;
+
+
+struct{
+    local int i,j;
+    for (i=0;i<FildCount;i++){
+        FildName nFildName; 
+    }  
+}FildNameFildIndex;
+
+
+typedef struct {
+ local int j;  
+     int m_vItemID;
+     for(j=0;j<FildCount;j++){   
+        switch(FildNameFildIndex.nFildName[j].FildType){
+            case 0: byte null;  break; 
+            case 1: TYPE_STRING str;  break; 
+            case 2: int TYPE_BOOL;    break; 
+            case 3: int TYPE_INT;   break; 
+            case 4: float TYPE_PER;    break; // 0.005
+            case 5: float TYPE_FLOAT; break; //float 5.511464e-05 hF 0.05383301
+            //default: byte unknown[4]; break; 
+            }
+        }
+}iData  <read=readTableData>;
+
+struct {
+    local int i;
+    for(i=0;i<DataCount;i++){        
+        iData Row;
+    }
+}TableRows;
+
+struct { 
+    ubyte szEND;
+    char END[szEND];
+}END;
+
+/*************************************************************
+************************Helpers*******************************
+*************************************************************/
+string readFildName(FildName &f) {    
+   local string s; 
+   SPrintf(s, "%s",f.Name); //
+   return s;
+};
+
+string readTableData(iData &f) {    
+   local string s; 
+   SPrintf(s, "RowID: %d",f.m_vItemID); //
+   return s;
+};

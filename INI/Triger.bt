@@ -1,0 +1,199 @@
+//------------------------------------------------
+//--- 010 Editor v8.0.1 Binary Template
+//
+//      File: Eternity Engine Kd-Tree File
+//   Authors: DevNP <dev.necropan@gmail.com>
+//   Version: 1.0
+//   Purpose: 
+//  Category: Game
+// File Mask: trigger.ini
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+//DN_triger_ini
+LittleEndian();
+enum BOOL {   
+    FALSE_t,
+    TRUE_t,
+};
+
+enum LoadSectorEnum {
+		LSE_Terrain = 0x0001,
+		LSE_Prop = 0x0002,
+		LSE_Control = 0x0004,
+		LSE_Sound = 0x0008,
+		LSE_Attribute = 0x0010,
+		LSE_Navigation = 0x0020,
+		LSE_Trigger = 0x0040,
+		LSE_Water = 0x0080,
+		LSE_Decal = 0x0100,
+
+		LSE_All = 0xFFFF,
+};
+
+enum TriggerElementTypeEnum {
+		Condition,
+		Action,
+		Event,
+
+		TriggerElementTypeEnum_Amount,
+};
+
+enum ScriptTypeEnum {
+		ScriptFile,
+		CustomScript,
+};
+
+enum ParamTypeEnum {
+		Integer,
+		Float,
+		String,
+		Operator,
+		Position,
+		Prop,
+		EventArea,
+		Value,
+		ParamTypeEnum_Amount,
+};
+
+enum OperatorTypeEnum {
+		And,
+		Or,
+		Random,
+};
+
+
+/************************************/
+typedef struct  { 
+    float x;
+    float y;
+    float z;
+}EtVector3;
+
+union TypeParm{
+	int nValue;
+	string szValue; //char *
+	float fValue;
+	EtVector3 vValue;
+};
+
+typedef struct  {
+    int strCount;
+    char Name[strCount];    
+}StdString <read=stdString>;
+
+
+typedef struct {  
+    ParamTypeEnum Type;   
+    int nSize;
+   // char szBuffer[nSize];  
+ 
+    switch( Type ) {
+        case Integer:
+		case Prop:
+		case Operator:
+		case EventArea:
+		case Value: int nValue; break;
+        case Float: float fValue; break;
+        case String: char szBuffer[nSize]; break;
+        case Position: EtVector3 vValue; break;
+    }
+    
+}ParamStruct <optimize=false>;
+
+typedef struct  {    
+    TriggerElementTypeEnum  m_Type;
+    ScriptTypeEnum m_ScriptType;
+    OperatorTypeEnum m_OperatorType;
+    int m_nOperatorIndex;
+    int m_nOperatorValue[4]; 
+ 
+    switch( m_ScriptType ) {
+        case ScriptFile: 
+         StdString m_szScriptName;
+         int nCount;         
+         local int i;
+         for(i=0; i<nCount; i++ ) {
+                 ParamTypeEnum Type;   
+                 int nSize;
+                switch( Type ) {
+                    case Integer:
+		            case Prop:
+		            case Operator:
+		            case EventArea:
+		            case Value: int nValue; break;
+                    case Float: float fValue; break;
+                    case String: char szBuffer[nSize]; break;
+                    case Position: EtVector3 vValue; break;
+                }
+            }
+               break;
+          case CustomScript: StdString m_szCustomScript; break;
+       }    
+    
+}TriggerElement <optimize=false,read=trigElement>;
+
+
+typedef struct  { 
+   int szLen;
+   char m_szCategory[szLen];
+   int szTrigNam;
+   char m_szTriggerName[szTrigNam];
+   ubyte m_bRepeat; //bool
+   byte s_nDummySize[512]; //512
+
+int nCount;
+ local int i;
+    for(i=0; i<nCount; i++ ) {
+         TriggerElement pElement;
+         Printf("[%d] %s\n",nCount,pElement.m_szScriptName.Name);
+    }
+
+int nCount2;
+ for(i=0; i<nCount2; i++ ) {
+         TriggerElement pElement;
+        Printf("[%d] %s\n",nCount2,pElement.m_szScriptName.Name);
+    }
+int nCount3;
+ for(i=0; i<nCount3; i++ ) {
+         TriggerElement pElement;
+
+        Printf("[%d] %s\n",nCount3,pElement.m_szScriptName.Name);
+    }
+ StdString  m_szDescription;
+}TriggerObject <optimize=false,read=strRead>;
+
+//************************//
+int nCount;
+local int i;
+for(i =0; i<nCount; i++ ) {
+    if (nCount >0){
+        TriggerObject pObject;    
+        //Printf("%s\n",pObject[].pElement.m_szScriptName.Name);
+   }
+}
+/*******************************************************
+ *  0. Helpers
+*******************************************************/
+
+string strRead(TriggerObject &in){
+    local string out;
+    SPrintf(out,"%s : %s",in.m_szCategory,in.m_szTriggerName );
+    return out;
+}
+
+string stdString(StdString &in){
+    local string out;
+    SPrintf(out,"%s ",in.Name );
+    return out;
+}
+
+string trigElement(TriggerElement &in){
+    local string out;
+    SPrintf(out,"%s",in.m_szScriptName.Name );
+    return out;
+}
+/*************************************************
+*
+*
+**************************************************/

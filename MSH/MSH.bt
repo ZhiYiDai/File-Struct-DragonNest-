@@ -1,0 +1,249 @@
+//--------------------------------------
+//--- 010 Editor v6.0 Binary Template
+//
+// File: Eternity Engine Mesh File 0.13
+// Author: DevNP <dev.necropan@gmail.com>
+// Revision:  1.0
+// Purpose:
+// Category: Game
+// File Mask: *.msh
+//--------------------------------------
+
+typedef struct {
+    float x;
+    float y;
+}EtVector2;
+
+typedef struct {
+    float x;
+    float y;
+    float z;
+}EtVector3;
+
+typedef struct {
+    float x;
+    float y;
+    float z;
+    float r;
+}EtVector4;
+
+typedef struct {
+	EtVector3 vOrigin;
+	EtVector3 vDirection;
+}Segment;
+
+typedef struct {
+	EtVector3 vOrigin;
+	EtVector3 vEdge1;
+    EtVector3 vEdge2;
+}CollisionTriangleList;
+
+typedef struct {
+    EtVector4 x;
+    EtVector4 y;
+    EtVector4 z;
+    EtVector4 r;
+}EtMatrix;
+
+enum CollisionType
+{
+	CT_BOX = 0,
+	CT_SPHERE = 1,
+	CT_CAPSULE = 2,
+	CT_TRIANGLE = 3,
+	CT_TRIANGLE_LIST = 4,
+	CT_TYPE_COUNT = 5,
+};
+
+typedef struct {
+    int nSize;  
+    if(nSize>0)  
+        char pName[nSize];
+
+}StdString<read=readString>;
+
+typedef struct {
+    char szHeaderString[256];	//Eternity Engine Mesh File 0.1
+    int nVersion;
+	int nSubMeshCount;
+	int nLODCount;
+	char bUVAni;
+	char cSpace[ 3 ];
+  	EtVector3 MaxVec;
+	EtVector3 MinVec;
+	int nBoneCount;
+	int nCollisionPrimitiveCount;
+	int nDummyCount;
+} MeshFileHeader <size=1024 >;
+
+typedef struct 
+{
+	char szParentName[ 256 ];
+	char szName[ 256 ];
+	int nVertexCount;
+	int nFaceBufferSize;
+	int nTextureChannel;
+	uchar bUseStrip;
+	uchar bUsePhysique;
+	uchar bUseVertexColor;
+}SSubMeshHeader <size=1024,optimize=false>;
+
+typedef struct {
+    char szBoneName[ 256 ];
+}BoneName;
+
+
+typedef struct {
+    short a;
+    short b;
+    short c;
+    short e;
+}BnIndex;
+
+typedef struct {
+	SSubMeshHeader SubHeder;
+    
+    short LoadIndex[SubHeder.nFaceBufferSize];
+
+    EtVector3 MST_POSITION[SubHeder.nVertexCount];
+
+    EtVector3 MST_NORMAL[SubHeder.nVertexCount];
+
+    for( i = 0; i < SubHeder.nTextureChannel; i++ )
+	{
+	    EtVector2 MST_TEXCOORD[SubHeder.nVertexCount];
+
+	}
+
+    if( SubHeder.bUseVertexColor >0)
+	{
+		int MST_COLOR[SubHeder.nVertexCount];
+	}
+
+    if( SubHeder.bUsePhysique >0)
+	{
+        BnIndex MST_BONEINDEX[SubHeder.nVertexCount];
+        EtVector4 MST_BONEWEIGHT[SubHeder.nVertexCount];
+
+        local int i;
+        int nBoneCount;
+       
+        for( i = 0; i < nBoneCount; i++ )
+		{
+	       BoneName m_BoneName;
+        }
+    }
+    
+}SubMesh <optimize=false>;
+
+typedef struct {
+    char szBoneName[ 256 ];
+         EtMatrix mtx;
+}Bone;
+
+typedef struct {
+    char szDunmyName1[ 256 ];
+    char szDunmyName2[ 256 ];
+    EtMatrix m_matrix;
+}Dunmy;
+
+
+typedef struct{
+    EtVector3 vCenter;
+	EtVector3 vAxis[ 3 ];
+	float fExtent[ 3 ];
+}CollisionBox;
+
+typedef struct{
+    EtVector3 vCenter;
+	float fRadius;
+}CollisionSphere;
+
+typedef struct{
+
+    Segment mSegment;
+	float fRadius;
+}CollisionCapsule;
+
+
+
+typedef struct{
+
+        CollisionType Type;
+        if( heder.nVersion > 10 )
+		{
+			StdString str;			
+		}
+
+local int i;
+        switch( Type )
+		{
+			case CT_BOX: CollisionBox pBox; break;
+            case CT_SPHERE: CollisionSphere pSphere; break;
+            case CT_CAPSULE: CollisionCapsule mCollisionCapsule; break;
+            case CT_TRIANGLE: break;
+			case CT_TRIANGLE_LIST:
+                int nCount;
+                for( i = 0; i < nCount; i++ )
+			    {
+                    CollisionTriangleList mCollTList;
+                }
+
+         break;
+            
+        }
+}CollisionPrimitive;
+
+///load
+MeshFileHeader heder;
+local int i,j;
+
+if(heder.nBoneCount >0){      
+    for( i = 0; i < heder.nBoneCount; i++ )
+	{       
+         Bone m_Bone;
+    }
+}
+
+if(heder.nSubMeshCount>0){
+    SubMesh nSubMesh[heder.nSubMeshCount];
+}
+
+//
+for( j = 0; j < heder.nCollisionPrimitiveCount; j++ )
+{
+        CollisionPrimitive m_CollisionPrimitive;
+
+}
+
+if( heder.nVersion >= 13 )
+{
+    if( heder.nDummyCount > 0)
+    {
+        //for( i = 0; i < heder.nDummyCount; i++ )
+	    //{
+           Dunmy m_dun[heder.nDummyCount];
+        //}
+    }
+}else{
+    for( i = 0; i < heder.nDummyCount; i++ )
+	{
+        char szDummyName[ 256 ];
+        if( szDummyName[0] == 'L' ) 
+        {
+        
+        }
+     }
+     Printf("Version Error");
+}
+
+/* Helper
+ *-----------------------------------*/
+string readString(StdString &in){
+    local string out;
+    if(in.nSize>0)
+        SPrintf(out,"%s",in.pName);
+    else
+        SPrintf(out,"");
+    return out;
+}
