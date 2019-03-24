@@ -1,0 +1,188 @@
+//------------------------------------------------
+//--- 010 Editor v8.0.1 Binary Template
+//
+//      File: Eternity Action File
+//   Authors: DevNP <dev.necropan@gmail.com>
+//   Version: 1.0
+//   Purpose: 
+//  Category: Game
+// File Mask: *.act
+//  ID Bytes: 
+//   History: 
+//------------------------------------------------
+
+enum SIGNAL_INDEX{
+    unknown  = 1,
+    unknown01  = 2,
+    unknown11  = 3,
+    SI_DAMAGE  = 4,
+    unknown1  = 9,
+    unknown2  = 10,
+    SI_MUSIC = 11,
+    SI_PARTICLE = 12,
+    EFFECT = 15,
+    unknown02  = 19,
+    unknown3 =31,
+    SI_EFFECT =33,
+    unknown4 =43,
+    unknown5 =45,
+    SI_DEATH =46,
+    SI_SPAWN_MONSTER = 48,
+    unknown07 = 70,
+    unknown7 = 78,
+    SI_SKIN = 92,
+    SI_TEXTURE=999
+};
+
+
+typedef struct {
+    int nSize;
+    char szName[nSize];
+}STDString <optimize=false,read=readStdString>;
+
+typedef struct {
+    float x,y;    
+}Vector2;
+
+typedef struct {
+    float x,y,z;    
+}Vector3;
+
+typedef struct {
+ float x, y, z, w;
+}Vector4;
+
+///////////////////////////////////////
+
+char szName[32];
+int nVersion;
+int nActionCount;
+
+typedef struct{
+    switch(nVersion)
+    {   
+    case 2: 
+        int dwVer2;
+     break;
+    case 3: 
+        int dwVer2;
+        int dwVer3;
+     break;
+    case 4: 
+        int dwVer2;
+        int dwVer3;
+        byte nOn;
+      break;
+    case 5: 
+        int dwVer2;
+        int dwVer3;
+        byte nOn;
+        int dwVer5;
+       break;
+    }
+
+}ActionSetting;
+
+typedef struct{
+    int type;
+   
+}DataSetting <size=256>;
+
+typedef struct {
+  SIGNAL_INDEX  m_nSignalIndex;
+  int  m_nStartFrame;
+  int  m_nEndFrame;
+  int m_nOrder;
+
+    switch(m_nSignalIndex)
+    {   
+     case 0: 
+     case 2: 
+     case 3: 
+     case SI_DAMAGE:
+     default: byte m_pData[256]; break;
+    };
+
+
+  //DataSetting m_pData;
+
+local int i;
+
+    int nTableCount;  
+    if( nTableCount > 0 ) {
+        int m_nVec2Index[nTableCount];
+        Vector2 vVec2List[nTableCount];
+    }
+   
+    int nTableCount;
+    if( nTableCount > 0 ) {
+        int m_nVec3Index[nTableCount];
+        Vector3 vVec3List[nTableCount];
+    }
+
+    int nTableCount;
+    if( nTableCount > 0 ) {
+        int m_nVec4Index[nTableCount];
+        Vector4 vVec4List[nTableCount];
+    }
+
+    int nTableCount;
+    if( nTableCount > 0 ) {
+        int m_nVecStrIndex[nTableCount];       
+    }   
+
+    for(i=0; i<nTableCount; i++ ) {
+
+        STDString szName;
+    }
+}ActionSignal<read=readSignal>;
+
+
+typedef struct {
+    STDString szName;
+    STDString szLinkAniName;
+    int dwLength;
+    STDString szNextActionName;
+    int dwBlendFrame;
+	int dwNextActionFrame;
+    if(nVersion>1){
+        ActionSetting m_Setting;
+    }
+
+    int nSignalCount;
+
+    local int i;
+    for( i=0; i< nSignalCount; i++ ) 
+    {       
+       ActionSignal pSignal;
+    }   
+
+}ActionElement<read=readElement>;
+
+local int i,j;
+for( i=0; i< nActionCount; i++ ) 
+{       
+    ActionElement pStruct;
+
+}
+
+/*************************************************
+*
+*
+**************************************************/
+string readStdString(STDString &fn){
+    local string out;
+     SPrintf(out, "%s", fn.szName);
+    return out;
+}
+
+string readSignal(ActionSignal &fn){
+    local string out;
+     SPrintf(out, "Signal Index [%d]\n", fn.m_nSignalIndex);
+    return out;
+}
+string readElement(ActionElement &fn){
+    local string out;
+     SPrintf(out, "[%s]: (%s -> %s)\n ", fn.szName.szName,fn.szLinkAniName.szName,fn.szNextActionName.szName);
+    return out;
+}

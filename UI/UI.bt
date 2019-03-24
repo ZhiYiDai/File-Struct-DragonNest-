@@ -296,6 +296,7 @@ typedef struct{
 	float fMargin;
 	float fLineSpace;
 }lBLoad_01;
+
 typedef struct{
     float fScrollBarSize;
 	int nScrollBarTemplate;
@@ -304,6 +305,7 @@ typedef struct{
 	float fMargin;
 	float fLineSpace;
 }lBLoad_02;
+
 typedef struct{
     float fScrollBarSize;
 	int nScrollBarTemplate;
@@ -313,6 +315,7 @@ typedef struct{
 	float fLineSpace;
     byte unknown;
 }lBLoad_03;
+
 typedef struct{
     VERSION dwVersion;
     switch( dwVersion ) {

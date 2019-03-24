@@ -9,7 +9,7 @@ See [010 Editor - Manual](https://www.sweetscape.com/010editor/manual)
 
 | File extension  | supported files | Signature Name                   |
 |-----------------|-----------------|----------------------------------|
-|       .act      |        -        | Eternity Action File             |
+|       .act      |        +        | Eternity Action File             |
 |       .ani      |        +        | Eternity Engine Ani File         |
 |       .cam      |        +        | Eternity Engine Camera File      |
 |       .eff      |        -        | Eternity Engine Effect File      |
