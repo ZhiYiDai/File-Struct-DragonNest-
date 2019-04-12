@@ -74,18 +74,18 @@ typedef struct {
 /* RGB color
  *-----------------------------------*/
 typedef struct {  
-    ubyte b, g, r , a;
-} ARGBColor <read=argbRead, write=argbWrite>;
+    ubyte X, Y, Z , W;
+} ARGBColor ;//<read=argbRead, write=argbWrite>;
 
 // display the color a bit more nice
 string argbRead(ARGBColor &f) {
      local string s;
   // SetBackColor( ReadInt(FTell())&0xFFFFFF );
-   SPrintf( s, "#%02X%02X%02X (%i%%)", f.r, f.g, f.b, (f.a/255)*100);
+   SPrintf( s, "#%02X%02X%02X (%i%%)", f.X, f.Y, f.W, (f.X/255)*100);
    return s;
 };
 void argbWrite(ARGBColor &c, string s) {
-    SScanf(s, "(%i %i %i %i)", c.r, c.g, c.b, c.a);
+    SScanf(s, "(%i %i %i %i)", c.X, c.Y, c.Z, c.W);
 }
 /* 
  *-----------------------------------*/
@@ -632,9 +632,9 @@ string strRead(UIControlProperty &in){
 void ParseRGBA(ARGBColor &r) {
     local int pos = FTell();
     FSeek(pos - 4);
-    local int blue = (r.b);
-    local int green = (r.g);
-    local int red = (r.r);
+    local int blue = (r.X);
+    local int green = (r.Y);
+    local int red = (r.Z);
     local int bc = (int)blue * 0x10000 + (int)green * 0x100 + (int)red;
     SetBackColor(bc);   
     int a <hidden=true>;
