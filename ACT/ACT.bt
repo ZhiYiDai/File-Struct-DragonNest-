@@ -98,7 +98,24 @@ typedef struct {
     {   
      case 0: 
      case 2: 
+          int n_unk; 
+          int n_unk1;
+          int n_unk2; 
+          int n_unk3;
+          byte m_pData[240];
+        break;
      case 3: 
+     case 9: 
+          int n_unk; 
+          byte m_pData[252];
+        break;
+     case 10: 
+        int n_boool; 
+        int n_null1; 
+        int n_null2;
+        int n_boool2; 
+        byte m_pData[240]; 
+        break;
      case SI_DAMAGE:
      default: byte m_pData[256]; break;
     };

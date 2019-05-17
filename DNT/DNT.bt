@@ -38,10 +38,10 @@ struct{
 
 typedef struct {
  local int j;  
-     int m_vItemID;
+     uint RowID;
      for(j=0;j<FildCount;j++){   
         switch(FildNameFildIndex.nFildName[j].FildType){
-            case 0: byte null;  break; 
+            case 0: byte RowType;  break; 
             case 1: TYPE_STRING str;  break; 
             case 2: int TYPE_BOOL;    break; 
             case 3: int TYPE_INT;   break; 
@@ -51,6 +51,7 @@ typedef struct {
             }
         }
 }iData <read=readTableData,bgcolor=0xf5a700>;
+
 
 struct {
     local int i;
@@ -75,6 +76,6 @@ string readFildName(FildName &f) {
 
 string readTableData(iData &f) {    
    local string s; 
-   SPrintf(s, "RowID: %d",f.m_vItemID); //
+   SPrintf(s, "RowID: %d ",f.RowID); //
    return s;
 };

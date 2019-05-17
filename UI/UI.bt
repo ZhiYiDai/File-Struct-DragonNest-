@@ -68,22 +68,24 @@ typedef struct {
 
 typedef struct {
     int szString;
-    char pString[szString];
+    if (szString>0)
+     char pString[szString];
 }StdString <read=readStdStr,write=writeStdStr>;//StdString
 
 /* RGB color
  *-----------------------------------*/
 typedef struct {  
     ubyte X, Y, Z , W;
-} ARGBColor ;//<read=argbRead, write=argbWrite>;
+} ARGBColor <read=argbRead, write=argbWrite>;
 
 // display the color a bit more nice
 string argbRead(ARGBColor &f) {
      local string s;
   // SetBackColor( ReadInt(FTell())&0xFFFFFF );
-   SPrintf( s, "#%02X%02X%02X (%i%%)", f.X, f.Y, f.W, (f.X/255)*100);
+   SPrintf( s, "%01.2f;%01.2f;%01.2f;%01.2f", f.X, f.Y, f.Z, f.W);//,  (%i%%) (f.X/255)*100
    return s;
 };
+
 void argbWrite(ARGBColor &c, string s) {
     SScanf(s, "(%i %i %i %i)", c.X, c.Y, c.Z, c.W);
 }
@@ -113,17 +115,51 @@ typedef struct {
 /* UI Template
  *-----------------------------------*/
 
-typedef struct {       
-    local int i;
-    for(i=0;i<26;i++){       
-        ARGBColor aColor;   
-        ParseRGBA(aColor); 
-    }       
-    byte Data[57];
-    int unk1;
+typedef struct {  
+        ARGBColor Normal;   
+        ParseRGBA(Normal); 
+        ARGBColor Disabled;   
+        ParseRGBA(Disabled);
+        ARGBColor Hidden;   
+        ParseRGBA(Hidden);
+        ARGBColor Focus;   
+        ParseRGBA(Focus);
+        ARGBColor MouseEnter;   
+        ParseRGBA(MouseEnter);
+        ARGBColor Pressed;   
+        ParseRGBA(Pressed);
+}GropColor;
+
+typedef struct {
+    GropColor TextureColor;
+    GropColor FontColor;
+    GropColor ShadowFontColor;
+    GropColor Color;
+
+ //GropColor bgColor;
+    hfloat unk0;
+     int unk1;
      hPOS padin;   
      hPOS marg;    
-}PARAM <optimize=false,size=181>;
+     hPOS rota;
+    hfloat unk2;
+    int unk3;
+    int unk4;
+    int unk5;
+    int unk6;
+    int unk7;
+    int unk8;
+
+    double unk9;
+    int unk10;
+    hfloat unk12;
+    hfloat unk13;
+    short unk14;
+    hfloat unk15;
+    byte ff1unk;
+    float unk16;
+    float unk17;
+}TProperty <optimize=false,size=181>;
 
 typedef struct {  
     byte m_bShow <fgcolor=cRed>;//true false boll
@@ -132,8 +168,8 @@ typedef struct {
     //int szNam;
    // char Name[szNam];
 
-    int CountParam;         
-    PARAM bParam[CountParam];
+    int CountProperty;         
+    TProperty tProperty[CountProperty];
 }UIProperty <optimize=false,read=prName>;
 
 /* UI Control
@@ -381,6 +417,7 @@ typedef struct {
     BOOL bRollOver;//bool
     byte unknown[3];
 }tbLoad_07;
+
 typedef struct { 
     VERSION dwVersion; 
     switch( dwVersion ) {
@@ -566,7 +603,7 @@ typedef struct {
         default: Printf("Type ID [%d]  not found\n",tp); break;
    }
 
-}UIControlProperty <optimize=false,read=strRead>;
+}Template <optimize=false,read=strRead>;
 
 /**************************************************************/
 /**************************************************************/
@@ -589,7 +626,7 @@ byte onOff;//on off
 if(heed.nControlCount>0){
 local int f=0;
     for(f=0;f<heed.nControlCount;f++){       
-       UIControlProperty pControl;     
+       Template pControl;     
     }  
 }
 
@@ -623,7 +660,7 @@ string readStdStr(StdString &in){
     SPrintf(out,"%s",in.pString);
     return out;
 }
-string strRead(UIControlProperty &in){
+string strRead(Template &in){
     local string out;
     SPrintf(out,"%s",in.name);
     return out;

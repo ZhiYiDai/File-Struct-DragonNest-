@@ -83,9 +83,9 @@ typedef struct
 	int nVertexCount;
 	int nFaceBufferSize;
 	int nTextureChannel;
-	uchar bUseStrip;
-	uchar bUsePhysique;
-	uchar bUseVertexColor;
+	uchar bUseStrip;         //bool
+	uchar bUsePhysique;      //bool
+	uchar bUseVertexColor;   //bool
 }SSubMeshHeader <size=1024,optimize=false>;
 
 typedef struct {
@@ -138,7 +138,7 @@ typedef struct {
 
 typedef struct {
     char szBoneName[ 256 ];
-         EtMatrix mtx;
+    EtMatrix mtx;
 }Bone;
 
 typedef struct {

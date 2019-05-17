@@ -37,15 +37,8 @@ typedef struct {
 	char szMeshName[ 256 ];
 	int nVersion;
 	int nSubMeshCount;
+    char null[504];
 }SkinFileHeader<size=1024>;
-
-
-typedef struct {
-    char szMaterialName[ 256 ];
-	char szEffectName[ 256 ];
-	float fAlphaValue;
-	int bEnableAlphablend;//bool
-}SSubSkinHeader <size=1024>;
 
 typedef struct {   
     StdString str;
@@ -62,23 +55,43 @@ typedef struct {
 
 }SCustomParam <optimize=false>;
 
-////////////////////////////////////////////////////////
-
-SkinFileHeader heder;
-
-local int i,j;
-for( i = 0; i < heder.nSubMeshCount; i++ )
-{
-    SSubSkinHeader fg;
+typedef struct {
+    char szMaterialName[ 256 ];
+	char szEffectName[ 256 ];
+	float fAlphaValue;
+	int bEnableAlphablend;//bool
+    char null[504];
     int nParamCount;
     for( j = 0; j < nParamCount; j++ )
 	{
         SCustomParam sk;
     }
+}SSubSkinHeader<read=SubSkinRead>;
+
+////////////////////////////////////////////////////////
+
+//SkinFileHeader heder;
+char szHeaderString[ 256 ];
+char szMeshName[ 256 ];
+int nVersion;
+int nSubMeshCount;
+char null[504];
+
+local int i,j;
+for( i = 0; i < nSubMeshCount; i++ )
+{
+    SSubSkinHeader fg;
+   
 }
 
 /* Helper
  *-----------------------------------*/
+string SubSkinRead(SSubSkinHeader &in){
+    local string out;
+    SPrintf(out,"%s: [AB:%d] ",in.szMaterialName,in.bEnableAlphablend);
+    return out;
+}
+
 string readString(StdString &in){
     local string out;
     SPrintf(out,"%s",in.pName);

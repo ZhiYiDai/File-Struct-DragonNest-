@@ -12,14 +12,13 @@ See [010 Editor - Manual](https://www.sweetscape.com/010editor/manual)
 |       .act      |        +        | Eternity Action File             |
 |       .ani      |        +        | Eternity Engine Ani File         |
 |       .cam      |        +        | Eternity Engine Camera File      |
-|       .eff      |        -        | Eternity Engine Effect File      |
+|       .eff      |        +        | Eternity Engine Effect File      |
 |       .env      |        -        | EnvInfo File Header              |
 |       .ext      |        +        |                                  |
 |       .dnt      |        +        |                                  |
-|       .mah      |        -        | Eternity Engine Mesh File (0.12) |
 |       .msh      |        +        | Eternity Engine Mesh File (0.1)  |
 |       .nav      |        -        |                                  |
-|       .ptc      |        -        | Eternity Engine Particle File    |
+|       .ptc      |        +        | Eternity Engine Particle File    |
 |       .ui       |        +        | Eternity Engine UI File          |
 |       .skn      |        +        | Eternity Engine Skin File        |
 
